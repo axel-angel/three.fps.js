@@ -28,9 +28,12 @@ wss.on('connection', function(ws) {
         var m = JSON.parse(m_);
         //console.log(['message', ws._id, m]);
         switch (m.type) {
-            case 'position':
-                state.players[ws._id].position = m.data;
+            case 'move':
+                state.players[ws._id] = m.data;
                 break;
+            default:
+                console.log(['ws unknown', ws._id, m]);
+
         }
     });
 
