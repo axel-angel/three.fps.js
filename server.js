@@ -81,7 +81,10 @@ var wsDispatch = {
     },
     joinTeam: function (ws, pid, team) {
         if (['red', 'blue'].indexOf(team) == -1) return;
-        state.players[pid].team = team;
+
+        var p = state.players[pid];
+        p.state = 'player';
+        p.team = team;
         wsEventAll('joinTeam', { player: pid, team: team  });
         wsEvent(ws, 'playerMode', { mode: 'player', position: [0, 1, 0] });
     },
