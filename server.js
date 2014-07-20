@@ -53,7 +53,7 @@ wss.on('connection', function(ws) {
         //console.log(['message', ws._id, m]);
         switch (m.type) {
             case 'move':
-                state.players[ws._id] = m.data;
+                state.players[ws._id].model = m.data;
                 break;
             default:
                 console.log(['ws unknown', ws._id, m]);
