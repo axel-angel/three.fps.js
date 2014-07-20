@@ -14,7 +14,7 @@ var $s = require('./lib/settings.js')._
 /* -- constants -- */
 var NEXTID = 0
   , wsFreq = 1
-  , map = $m.genMap(Math.random())
+  , map = $m.genMap(Math.floor($s.map.seedMax * Math.random()))
   , state = {
         players: {},
     }
