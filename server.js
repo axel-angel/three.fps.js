@@ -3,6 +3,7 @@
 
 /* -- imports -- */
 var $s = require('./lib/settings.js')._
+  , $m = require('./lib/map.js')._
   , util = require('util')
   , http = require('http')
   , nstatic = require('node-static')
@@ -13,6 +14,7 @@ var $s = require('./lib/settings.js')._
 /* -- constants -- */
 var NEXTID = 0
   , wsFreq = 1
+  , map = $m.genMap(Math.random())
   , state = {
         players: {},
     }
@@ -50,7 +52,10 @@ wss.on('connection', function(ws) {
     };
     console.log(['connection', ws._id]);
 
-    wsEvent(ws, 'id', ws._id);
+    wsEvent(ws, 'init', {
+        id: ws._id,
+        map: map,
+    });
     wsEvent(ws, 'playerMode', {
         mode: 'spectate',
         position: [0, $s.spectateHeight, 0]
