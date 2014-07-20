@@ -43,8 +43,10 @@ wss.on('connection', function(ws) {
     state.players[ws._id] = {
         state: 'spectate',
     };
-    wsEvent(ws, 'id', ws._id);
     console.log(['connection', ws._id]);
+
+    wsEvent(ws, 'id', ws._id);
+    wsEvent(ws, 'playerMode', { mode: 'spectate', position: [0, 20, 0] });
 
     ws.on('close', function () {
         console.log(['close', ws._id]);
