@@ -1,17 +1,39 @@
 "use strict";
 
-var WebSocketServer = require('ws').Server
-    , wss = new WebSocketServer({port: 8080})
-    , wsFreq = 0.05;
+
+/* -- imports -- */
+var $s = require('./lib/settings.js')._
+  , util = require('util')
+  , http = require('http')
+  , nstatic = require('node-static')
+  , WebSocketServer = require('ws').Server
 ;
 
-var NEXTID = 0;
-var state = {
-    players: {},
-};
+
+/* -- constants -- */
+var NEXTID = 0
+  , wsFreq = 1
+  , state = {
+        players: {},
+    }
+;
+
+
+/* -- helpers -- */
 function wsJson(ws, m_) {
     ws.send(JSON.stringify(m_));
 };
+
+
+/* -- static server -- */
+var server = http.createServer(function (req, res) {
+    var folder = new(nstatic.Server)('.');
+    folder.serve(req, res);
+}).listen($s.port);
+
+
+/* -- websocket server -- */
+var wss = new WebSocketServer({ server: server })
 
 wss.on('connection', function(ws) {
     ws._id = NEXTID;
@@ -42,6 +64,8 @@ wss.on('connection', function(ws) {
     ++NEXTID;
 });
 
+
+/* -- regularly update client state -- */
 setInterval(function () {
     for (var i in wss.clients) {
         wsJson(wss.clients[i], {
