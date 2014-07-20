@@ -26,6 +26,11 @@ function wsEvent(ws, tpe, d) {
         data: d,
     }));
 };
+function wsEventAll(tpe, d) {
+    for (var i in wss.clients) {
+        wsEvent(wss.clients[i], tpe, d);
+    }
+};
 
 
 /* -- static server -- */
@@ -55,24 +60,23 @@ wss.on('connection', function(ws) {
 
     ws.on('message', function(m_) {
         var m = JSON.parse(m_);
-        //console.log(['message', ws._id, m]);
-        switch (m.type) {
-            case 'move':
-                state.players[ws._id].model = m.data;
-                break;
-            default:
-                console.log(['ws unknown', ws._id, m]);
-
+        if (m.type in wsDispatch) {
+            wsDispatch[m.type](ws, ws._id, m.data);
+        }
+        else {
+            console.log(['ws unknown', ws._id, m.type, m]);
         }
     });
 
     ++NEXTID;
 });
 
-
-/* -- regularly update client state -- */
 setInterval(function () {
-    for (var i in wss.clients) {
-        wsEvent(wss.clients[i], 'state', state);
-    }
+    wsEventAll('state', state);
 }, wsFreq*1000);
+
+var wsDispatch = {
+    move: function (ws, pid, data) {
+        state.players[pid].model = data;
+    },
+};
