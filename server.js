@@ -20,8 +20,11 @@ var NEXTID = 0
 
 
 /* -- helpers -- */
-function wsJson(ws, m_) {
-    ws.send(JSON.stringify(m_));
+function wsEvent(ws, tpe, d) {
+    ws.send(JSON.stringify({
+        type: tpe,
+        data: d,
+    }));
 };
 
 
@@ -40,7 +43,7 @@ wss.on('connection', function(ws) {
     state.players[ws._id] = {
         state: 'spectate',
     };
-    wsJson(ws, { type: 'id', data: ws._id });
+    wsEvent(ws, 'id', ws._id);
     console.log(['connection', ws._id]);
 
     ws.on('close', function () {
@@ -68,9 +71,6 @@ wss.on('connection', function(ws) {
 /* -- regularly update client state -- */
 setInterval(function () {
     for (var i in wss.clients) {
-        wsJson(wss.clients[i], {
-            type: 'state',
-            data: state,
-        });
+        wsEvent(wss.clients[i], 'state', state);
     }
 }, wsFreq*1000);
