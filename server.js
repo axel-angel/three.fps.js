@@ -51,7 +51,10 @@ wss.on('connection', function(ws) {
     console.log(['connection', ws._id]);
 
     wsEvent(ws, 'id', ws._id);
-    wsEvent(ws, 'playerMode', { mode: 'spectate', position: [0, 20, 0] });
+    wsEvent(ws, 'playerMode', {
+        mode: 'spectate',
+        position: [0, $s.spectateHeight, 0]
+    });
 
     ws.on('close', function () {
         console.log(['close', ws._id]);
@@ -86,6 +89,9 @@ var wsDispatch = {
         p.state = 'player';
         p.team = team;
         wsEventAll('joinTeam', { player: pid, team: team  });
-        wsEvent(ws, 'playerMode', { mode: 'player', position: [0, 1, 0] });
+        wsEvent(ws, 'playerMode', {
+            mode: 'player',
+            position: [0, $s.camera.height, 0]
+        });
     },
 };
