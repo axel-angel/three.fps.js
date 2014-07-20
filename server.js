@@ -38,7 +38,7 @@ var wss = new WebSocketServer({ server: server })
 wss.on('connection', function(ws) {
     ws._id = NEXTID;
     state.players[ws._id] = {
-        position: {},
+        state: 'spectate',
     };
     wsJson(ws, { type: 'id', data: ws._id });
     console.log(['connection', ws._id]);
