@@ -1,3 +1,5 @@
+"use strict";
+
 var WebSocketServer = require('ws').Server
     , wss = new WebSocketServer({port: 8080})
     , wsFreq = 0.05;
