@@ -13,7 +13,6 @@ var $s = require('./lib/settings.js')._
 
 /* -- constants -- */
 var NEXTID = 0
-  , wsFreq = 1
   , map = $m.genMap(Math.floor($s.map.seedMax * Math.random()))
   , state = {
         players: {},
@@ -81,7 +80,7 @@ wss.on('connection', function(ws) {
 
 setInterval(function () {
     wsEventAll('state', state);
-}, wsFreq*1000);
+}, $s.wsFreq*1000);
 
 var wsDispatch = {
     move: function (ws, pid, data) {
