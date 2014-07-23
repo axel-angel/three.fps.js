@@ -102,4 +102,9 @@ var wsDispatch = {
         // TODO: check validity, do damage
         wsEventAll('bullet', data);
     },
+    kill: function (ws, pid, tid) {
+        wsEventAll('playerKill', { pid: pid, tid: tid });
+        state.players[tid] = {};
+        state.players[tid].state = 'spectate';
+    },
 };
