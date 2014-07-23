@@ -98,4 +98,8 @@ var wsDispatch = {
             position: [0, $s.camera.height, 0]
         });
     },
+    bullet: function (ws, pid, data) {
+        // TODO: check validity, do damage
+        wsEventAll('bullet', data);
+    },
 };
